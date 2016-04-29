@@ -17,7 +17,7 @@ def getNames(textfile):
 
 def getWikiData(names):
     f = open(index_file, 'w')
-    for name in anames:
+    for name in names:
         page = wikipedia.page(name)
         content = page.content
         wordCount = getWordCount(content)
