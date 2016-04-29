@@ -32,11 +32,11 @@ def tf_idf(spark):
                  .map(lambda x: (x[0],len(list(x[1])))) \
                  .map(lambda x: (x[0],distinctpages/float(x[1])))
     
-    tfidf = termfreq.keyBy(lambda x: x[1]) \
-            .join(invdocfreq) \
-            .map(lambda x: (x[1][0][0],x[0],x[1][0][2]*x[1][1])) \
-            .sortBy(lambda x: (x[0],x[2])) \
-            .saveAsTextFile(tf_idf_file)
+        tfidf = termfreq.keyBy(lambda x: x[1]) \
+                .join(invdocfreq) \
+                .map(lambda x: (x[1][0][0],x[0],x[1][0][2]*x[1][1])) \
+                .sortBy(lambda x: (x[0],x[2])) \
+                .saveAsTextFile(tf_idf_file)
 
 def split_input(line):
 	return line[0].split(',')[0], line[0].split(',')[1],line[1]
