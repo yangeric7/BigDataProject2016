@@ -2,22 +2,21 @@ import wikipedia
 import csv
 import sys
 
-index_file = 'testwordcount.txt'
+index_file = 'playerWikiData.csv'
 
 def getNames(textfile):
     names = []
-    with open(textfile) as playerData:
-        reader = csv.DictReader(playerData)
-        for row in reader:
-            name = row['Player']
-            if name not in names:
-                names.append(name)
+    f = open(textfile)
+    for line in f:
+        name = line.rstrip()
+        names.append(name)
 
     return names
 
 def getWikiData(names):
     f = open(index_file, 'w')
     for name in names:
+        print name
         try:
             page = wikipedia.page(name)
         except wikipedia.exceptions.DisambiguationError as e:
@@ -27,30 +26,10 @@ def getWikiData(names):
                 page = wikipedia.page(newsearch)
             else:
                 continue
-        content = page.content
-        wordCount = getWordCount(content)
         links = len(page.links)
-
-        for word in wordCount:
-            print word;
-            data = (name,word,wordCount[word])
-            f.write(str(data) + '\n')
+        f.write(name + ',' + str(links) + '\n')
 
     f.close()
-
-def getWordCount(content):
-    importantWords = ['MVP','All-Star','championship','award']
-    listOfWords = content.split(" ")
-    wordCount = {}
-    
-    for word in listOfWords:
-        if word in importantWords:
-            if word in wordCount:
-                wordCount[word] = wordCount[word] + 1
-            else:
-                wordCount[word] = 1
-
-    return wordCount
 
 if __name__ == '__main__':
     playerfile = sys.argv[1]
