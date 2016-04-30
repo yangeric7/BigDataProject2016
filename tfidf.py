@@ -7,8 +7,8 @@ This portion of the code reflects the same tf_idf logic and code produced from
 homework 3
 '''
 
-word_file = 'hdfs:///user/yange1/words.txt'
-tf_idf_file = 'hdfs:///user/yange1/tfidf.txt'
+word_file = 'hdfs:///user/yange1/words'
+tf_idf_file = 'hdfs:///user/yange1/tfidf'
 
 def tf_idf(spark):
 	word_data = spark.textFile(word_file)
@@ -36,8 +36,11 @@ def tf_idf(spark):
                 .join(invdocfreq) \
                 .map(lambda x: (x[1][0][0],x[0],x[1][0][2]*x[1][1])) \
                 .sortBy(lambda x: (x[0],x[2])) \
+                .map(toCSV) \
                 .saveAsTextFile(tf_idf_file)
 
+def toCSV(line):
+        return ','.join(str(d) for d in line)
 def split_input(line):
 	return line[0].split(',')[0], line[0].split(',')[1],line[1]
 
