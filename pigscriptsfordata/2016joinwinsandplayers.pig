@@ -3,7 +3,8 @@ labeledplayerstats = FOREACH playerstats GENERATE $1 as Player, $2 as Position, 
 GS, $7 as MP, $8 as FG, $9 as FGA, $10 as FGPercentage, $11 as ThreeP, $12 as ThreePA, $13 as ThreePPercentage, $14 as
 TwoP, $15 as TwoPA, $16 as TwoPPercentage, $17 as eFGPercentage, $18 as FT, $19 as FTA, $20 as FTPercentage, $21 as ORB,
 $22 as DRB, $23 as TRB, $24 as AST, $25 as STL, $26 as BLK, $27 as TOV, $28 as PF, $29 as PTS, $30 as Season, $31 as MVP;
-gamethreshold = FILTER labeledplayerstats BY G > 40;
+validplayers = FILTER labeledplayerstats BY Player != 'Player';
+gamethreshold = FILTER validplayers BY G > 40;
 minutethreshold = FILTER gamethreshold BY MP > 1000;
 
 teamstats = LOAD '2016teamwindata.csv' using PigStorage(',');
