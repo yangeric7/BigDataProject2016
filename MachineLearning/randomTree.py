@@ -1,28 +1,17 @@
 import csv
 import sys
 import matplotlib.pyplot as plt
-from sklearn import tree
 from sklearn import cross_validation
 from sklearn import metrics
-from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 def prediction(feat,label):
     x_train, x_test, y_train, y_test = cross_validation.train_test_split(feat, label, test_size = 0.25, random_state = 0)
     num_leaves = []
     accuracy_score = []
     auc_score = []
-    # for depth in range(1,10):
-    #     clf = tree.DecisionTreeClassifier(max_depth = depth)
-    #     clf.fit(x_train,y_train)
-    #     predictions = clf.predict(x_test)
-    #     accuracy = clf.score(x_test,y_test)
-    #     auc = metrics.roc_auc_score(y_test,predictions)
-    #     num_leaves.append(depth)
-    #     accuracy_score.append(accuracy)
-    #     auc_score.append(auc)
-
     for depth in range(1,10):
-        clf = AdaBoostClassifier(tree.DecisionTreeClassifier(max_depth = depth), n_estimators = 50)
+        clf = RandomForestClassifier(n_estimators = 10, max_depth = depth)
         clf.fit(x_train,y_train)
         predictions = clf.predict(x_test)
         accuracy = clf.score(x_test,y_test)
@@ -30,7 +19,6 @@ def prediction(feat,label):
         num_leaves.append(depth)
         accuracy_score.append(accuracy)
         auc_score.append(auc)
-
 
     return num_leaves,accuracy_score,auc_score
 
@@ -40,6 +28,7 @@ def getValues(filename):
     baseFeat = []
     label = []
     features = []
+    
     with open(filename) as data:
         reader = csv.reader(data,delimiter = ',')
         for row in reader:
@@ -50,8 +39,9 @@ def getValues(filename):
             features.append(temp)
             baseFeat.append([float(row[10]),float(row[34])])
             label.append(float(row[-1]))
-    
+                
     return baseFeat, features,label
+
 if __name__ == '__main__':
     filename = sys.argv[1]
     baseFeat,features, label  = getValues(filename)
@@ -61,16 +51,16 @@ if __name__ == '__main__':
     plt.figure(1)
     plt.plot(baseDepth,baseAcc, 'o-', color = 'r',label = 'Baseline')
     plt.plot(depth,acc, 'o-', color = 'b' ,label = 'Actual')
-    plt.suptitle('MVP Prediction: Accuracy of Decision Tree w/ AdaBoost', fontsize = 18)
-    plt.xlabel('Depth of Decision Tree')
+    plt.suptitle('MVP Prediction: Accuracy of Random Forest', fontsize = 24)
+    plt.xlabel('Depth of Random Forest')
     plt.ylabel('Accuracy')
     plt.legend(loc = 'upper left')
 
     plt.figure(2)
     plt.plot(baseDepth, baseAUC, 'o-', color = 'r', label = 'Baseline')
     plt.plot(depth, auc, 'o-', color = 'b', label = 'Actual')
-    plt.suptitle('MVP Prediction: AUC of Decision Tree w/ AdaBoost', fontsize = 18)
-    plt.xlabel('Depth of Decision Tree')
+    plt.suptitle('MVP Prediction: AUC of Random Forest', fontsize = 24)
+    plt.xlabel('Depth of Random Forest')
     plt.ylabel('Area Under Curve')
     plt.legend(loc = 'upper left')
     plt.show()
