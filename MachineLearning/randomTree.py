@@ -23,8 +23,8 @@ def prediction(feat,label):
     return num_leaves,accuracy_score,auc_score
 
 def getValues(filename):
-    featureIndex = [1,2,3,4]
-    #featureIndex = [1,2,3,4,10,15,25,28,29,30,31,32,34]
+    #featureIndex = [1,2,3,4]
+    featureIndex = [1,2,3,4,10,15,25,28,29,30,31,32,34]
     baseFeat = []
     label = []
     features = []
