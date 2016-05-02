@@ -77,7 +77,7 @@ if __name__ == '__main__':
     plt.plot(baseDepth, baseAUC, 'o-', color = 'r', label = 'Baseline')
     plt.plot(depth, auc, 'o-', color = 'b', label = 'Wiki Only')
     plt.plot(CombDepth, CombAUC, 'o-', color = 'g', label = 'Combined')
-    plt.suptitle('MVP Prediction: AUC of Decision Tree', fontsize = 18)
+    plt.suptitle('MVP Prediction: AUC of Decision Tree with Boosting', fontsize = 18)
     plt.xlabel('Depth of Decision Tree')
     plt.ylabel('Area Under Curve')
     plt.legend(loc = 'upper left')
