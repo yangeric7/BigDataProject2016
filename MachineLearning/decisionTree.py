@@ -34,9 +34,7 @@ def prediction(feat,label):
 
     return num_leaves,accuracy_score,auc_score
 
-def getValues(filename):
-    #featureIndex = [1,2,3,4]
-    featureIndex = [1,2,3,4,10,15,25,28,29,30,31,32,34]
+def getValues(filename, featureIndex):
     baseFeat = []
     label = []
     features = []
@@ -54,9 +52,18 @@ def getValues(filename):
     return baseFeat, features,label
 if __name__ == '__main__':
     filename = sys.argv[1]
-    baseFeat,features, label  = getValues(filename)
+
+    featureWiki = [1,2,3,4]
+    featureCombined = [1,2,3,4,10,15,25,28,29,30,31,32,34]
+
+    baseFeat,features, label  = getValues(filename, featureWiki)
     baseDepth, baseAcc, baseAUC = prediction(baseFeat,label)
     depth, acc, auc = prediction(features,label)
+
+    baseComb, featComb, labelComb = getValues(filename, featureCombined)
+    baseCombDepth, baseCombAcc, baseCombAUC = prediction(baseComb, label)
+    CombDepth, CombAcc, CombAUC = prediction(featComb,label)
+
     
     plt.figure(1)
     plt.plot(baseDepth,baseAcc, 'o-', color = 'r',label = 'Baseline')
@@ -68,7 +75,8 @@ if __name__ == '__main__':
 
     plt.figure(2)
     plt.plot(baseDepth, baseAUC, 'o-', color = 'r', label = 'Baseline')
-    plt.plot(depth, auc, 'o-', color = 'b', label = 'Actual')
+    plt.plot(depth, auc, 'o-', color = 'b', label = 'Wiki Only')
+    plt.plot(CombDepth, CombAUC, 'o-', color = 'g', label = 'Combined')
     plt.suptitle('MVP Prediction: AUC of Decision Tree', fontsize = 18)
     plt.xlabel('Depth of Decision Tree')
     plt.ylabel('Area Under Curve')
